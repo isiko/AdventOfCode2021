@@ -55,14 +55,14 @@ char** str_split(char* a_str, const char a_delim)
 }
 
 int main() {
-    FILE *input;
-    input = fopen("../input.txt", "r");
     int depth = 0;
     int position = 0;
 
+    FILE *input;
+    input = fopen("../input.txt", "r");
     char line[256]; /* or other suitable maximum line size */
-    while (fgets(line, sizeof line, input) != NULL){
 
+    while (fgets(line, sizeof line, input) != NULL){
         char** splitString = str_split(line, ' ');
 
         char* command = splitString[0];
