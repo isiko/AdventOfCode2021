@@ -2,3 +2,6 @@
 *.exe
 *.obj
 cmake-build-debug
+
+.vscode
+build
