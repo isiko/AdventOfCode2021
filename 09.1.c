@@ -10,7 +10,7 @@ int map[inputLength][inputHeight];
 
 int readFile(){
     FILE *input_file;
-    input_file = fopen("../input.txt", "r");
+    input_file = fopen("../../inputs/09.txt", "r");
 
     if (!input_file){
         printf("Error while loading File");
@@ -36,7 +36,6 @@ int readFile(){
 int main() {
     if(readFile()){
         int totalRisk = 0;
-        
         for(int i = 0; i<inputLength; i++){
             for(int j = 0; j<inputHeight; j++){
                 int current = map[i][j];

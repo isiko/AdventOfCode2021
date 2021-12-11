@@ -9,7 +9,7 @@ int input[inputLength];
 
 int readFile(){
     FILE *input_file;
-    input_file = fopen("../input.txt", "r");
+    input_file = fopen("../../inputs/01.txt", "r");
 
     if (!input_file){
         printf("Error while loading File");
@@ -27,20 +27,24 @@ int readFile(){
     return (1);
 }
 
+#define startingIndex 1
+
 int main() {
-    if (readFile()) {
+    if(readFile()){
         int counter = 0;
+
         int lastInt = 0;
-
-        for (int i = 2; i < 2000; i++) {
-            int sum = input[i] + input[i - 1] + input[i - 2];
-            printf("%d\n", sum);
-            if (i != 2 && sum > lastInt) counter++;
-            lastInt = sum;
+        for (int i = startingIndex; i < inputLength; i++) {
+            int current = input[i];
+            printf("%d\n", current);
+            if (i != startingIndex && current > lastInt) counter++;
+            lastInt = current;
         }
-        printf("%d Erhoehungen", counter);
 
+        printf("%d Erhoehungen", counter);
         return 0;
     }
+
+    return 1;
 }
 
