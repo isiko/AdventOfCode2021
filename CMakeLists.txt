@@ -25,7 +25,7 @@ add_executable(Day07.1 07.1.c)
 add_executable(Day07.2 07.2.c)
 
 add_executable(Day08.1 08.1.c)
-#add_executable(Day08.2 08.2.c)
+add_executable(Day08.2 08.2.c)
 
 add_executable(Day09.1 09.1.c)
 add_executable(Day09.2 09.2.c)

@@ -1,173 +1,188 @@
+//
+// Created by isihd on 03.12.2021.
+//
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <string.h>
+#include <assert.h>
+#include <math.h>
 
-//#include "utils.h"
+#include "util.c"
 
-int main()
-{
-    FILE* f = fopen("../../inputs/08.txt", "rb");
-    char sequences[1024][10][8];
-    char digits[1024][4][8];
-    int digitsCount = 0;
+#define inputLength 300
+#define inputLengthHight 200
 
-    char line[128];
-    while (readStrFromLine(line, sizeof(line), f)) {
-        char* token = strtok(line + strcspn(line, "|") + 2, " ");
-        int count = 0;
-        do {
-            strcpy(digits[digitsCount][count++], token);
-        } while ((token = strtok(NULL, " ")));
-        token = strtok(line, " ");
-        count = 0;
-        do {
-            strcpy(sequences[digitsCount][count++], token);
-        } while ((token = strtok(NULL, " ")));
-        digitsCount++;
+char input[10];
+char output[4];
+
+int digits[10][7] = {
+    {1,1,1,0,1,1,1}, //0
+    {0,0,1,0,0,1,0}, //1
+    {1,0,1,1,1,0,1}, //2
+    {1,0,1,1,0,1,1}, //3
+    {0,1,1,1,0,1,0}, //4
+    {1,1,0,1,0,1,1}, //5
+    {1,1,0,1,1,1,1}, //6
+    {1,0,1,0,0,1,0}, //7
+    {1,1,1,1,1,1,1}, //8
+    {1,1,1,1,0,1,1}, //9
+};
+
+void printArray(char message[], int array[]){
+    //int arrayLen = sizeof(array)/sizeof(array[0]);
+    int arrayLen =7;
+    if(strlen(message) > 0) printf("%s: ", message);
+    for (int i = 0; i < arrayLen; i++)
+    {
+        printf("%d", array[i]);
+    }
+    printf("\n");
+}
+
+int isDigit(int testFor[7]){
+    for(int i = 0;i<10; i++){
+        int success = 1;
+        for(int s = 0; s<7; s++)
+            if(digits[i][s] != testFor[s]) {
+                success = 0;
+            }
+        if(success == 1){
+            return i;
+        }
+    }
+    return -1;
+}
+
+int indexFromChar(char c){
+    switch(c){
+        case 'a': return 0;
+        case 'b': return 1;
+        case 'c': return 2;
+        case 'd': return 3;
+        case 'e': return 4;
+        case 'f': return 5;
+        case 'g': return 6;
+        default: return -1;
+    }
+}
+
+int main(){
+    //Take notes
+    FILE *input_file;
+    input_file = fopen("../../inputs/08.txt", "r");
+
+    if (!input_file){
+        printf("Error while loading File\n");
+        return(0);
     }
 
-    // part 1
-    int uniqueCount = 0;
-    for (int i = 0; i < digitsCount; i++) {
-        for (int j = 0; j < 4; ++j) {
-            int len = strlen(digits[i][j]);
-            if (len == 2 || len == 3 || len == 4 || len == 7) {
-                uniqueCount++;
-            }
-        }
-    }
-    printf("%d\n", uniqueCount);
+    char line[inputLength];
 
-    // part 2
-    int total = 0;
-    for (int i = 0; i < digitsCount; i++) {
-        // count letters
-        char solution[7] = {0};
-        bool lettersFound[7] = {0};
-        int letterCount[7] = {0};
-        for (int j = 0; j < 10; j++) {
-            int len = strlen(sequences[i][j]);
-            for (int k = 0; k < len; k++) {
-                letterCount[sequences[i][j][k] - 'a']++;
-            }
-        }
+    int returnValue = 0;
+    int searchedMappings = 0;
 
-        // figure out c, e and f
-        for (int j = 0; j < 7; ++j) {
-            switch (letterCount[j]) {
-                case 4:
-                    solution[4] = 'a' + j;
-                    lettersFound[j] = true;
-                    break;
-                case 6:
-                    solution[5] = 'a' + j;
-                    lettersFound[j] = true;
-                    break;
-                case 9:
-                    solution[2] = 'a' + j;
-                    lettersFound[j] = true;
-                    break;
-            }
-        }
+    for(int i = 0; i<inputLengthHight; i++){
+        fgets(line, sizeof line, input_file);
+        line[strcspn(line, "\n")] = 0;
+        char** io = str_split(line, ';');
+        char** input = str_split(io[0], ' ');
+        char** output = str_split(io[1], ' ');
 
-        // figure out b
-        for (int j = 0; j < 10; j++) {
-            int len = strlen(sequences[i][j]);
-            if (len == 2) {
-                if (sequences[i][j][0] == solution[2]) {
-                    solution[1] = sequences[i][j][1];
-                    lettersFound[sequences[i][j][1] - 'a'] = true;
-                } else {
-                    solution[1] = sequences[i][j][0];
-                    lettersFound[sequences[i][j][0] - 'a'] = true;
-                }
-                break;
-            }
-        }
+        int mappingCorrect = 0;
+        int mapping[7] = {-1,-1,-1,-1,-1,-1,-1};
 
-        // figure out a
-        for (int j = 0; j < 7; j++) {
-            if (letterCount[j] == 8) {
-                if ('a' + j != solution[1]) {
-                    solution[0] = 'a' + j;
-                    lettersFound[j] = true;
-                    break;
-                }
-            }
-        }
+        for(int s0 = 0; s0<7; s0++){
+            for(int s1 = 0; s1<7; s1++){
+                if(s1 == s0) continue;
+                for(int s2 = 0; s2<7; s2++){
+                    if(s2 == s0) continue;
+                    if(s2 == s1) continue;
+                    for(int s3 = 0; s3<7; s3++){
+                        if(s3 == s0) continue;
+                        if(s3 == s1) continue;
+                        if(s3 == s2) continue;
+                        for(int s4 = 0; s4<7; s4++){
+                            if(s4 == s0) continue;
+                            if(s4 == s1) continue;
+                            if(s4 == s2) continue;
+                            if(s4 == s3) continue;
+                            for(int s5 = 0; s5<7;s5++){
+                                if(s5 == s0) continue;
+                                if(s5 == s1) continue;
+                                if(s5 == s2) continue;
+                                if(s5 == s3) continue;
+                                if(s5 == s4) continue;
+                                for(int s6 = 0; s6<7; s6++){
+                                    if(s6 == s0) continue;
+                                    if(s6 == s1) continue;
+                                    if(s6 == s2) continue;
+                                    if(s6 == s3) continue;
+                                    if(s6 == s4) continue;
+                                    if(s6 == s5) continue;
 
-        // figure out g
-        for (int j = 0; j < 10; j++) {
-            int len = strlen(sequences[i][j]);
-            if (len == 4) {
-                for (int k = 0; k < 4; k++) {
-                    bool isIn = false;
-                    for (int l = 0; l < 7; ++l) {
-                        if (solution[l] == sequences[i][j][k]) {
-                            isIn = true;
-                            break;
+                                    mapping[0] = s0;
+                                    mapping[1] = s1;
+                                    mapping[2] = s2;
+                                    mapping[3] = s3;
+                                    mapping[4] = s4;
+                                    mapping[5] = s5;
+                                    mapping[6] = s6;
+                                    //printArray("Mapping", mapping);
+                                    searchedMappings++;
+
+                                    int success = 1;
+                                    for(int j = 0; j<10;j++){
+                                        int currentnumer[7] = {0,0,0,0,0,0,0};
+                                        for (int l = 0; l < strlen(input[j]); l++)
+                                            currentnumer[mapping[indexFromChar(input[j][l])]] = 1;
+                                        if (isDigit(currentnumer) < 0){
+                                            success = 0; 
+                                            break;
+                                        }
+                                    }
+
+                                    if(success == 1) mappingCorrect = 1;
+                                    if(mappingCorrect == 1) break;
+                                }
+                                if(mappingCorrect == 1) break;
+                            }
+                            if(mappingCorrect == 1) break;
                         }
+                        if(mappingCorrect == 1) break;
                     }
-                    if (!isIn) {
-                        solution[6] = sequences[i][j][k];
-                        lettersFound[sequences[i][j][k] - 'a'] = true;
-                        goto found;
-                    }
+                    if(mappingCorrect == 1) break;
+                }
+                if(mappingCorrect == 1) break;
+            }
+            if(mappingCorrect == 1) break;
+        }
+
+        if(mappingCorrect == 1){
+            printArray("Found Mapping", mapping);
+            int multiplyer = 10000;
+            int outputValue = 0;
+            for (int j = 0; j < 4; j++)
+            {
+                multiplyer /= 10;
+                int currentnumer[7] = {0,0,0,0,0,0,0};
+                for (int l = 0; l < strlen(output[j]); l++)
+                    currentnumer[mapping[indexFromChar(output[j][l])]] = 1;
+                if (isDigit(currentnumer) < 0){
+                    printf("Fuck");
+                    return 1;
+                } else {
+                    outputValue += multiplyer*isDigit(currentnumer);
                 }
             }
+            returnValue += outputValue;
+        } else {
+            printf("Couldn't find Mapping :/\n");
+            return -1;
         }
-        found:
-
-        // figure out d
-        for (int j = 0; j < 7; ++j) {
-            if (!lettersFound[j]) {
-                solution[3] = 'a' + j;
-                break;
-            }
-        }
-
-        // translate
-        int number = 0;
-        int mul = 1000;
-        for (int j = 0; j < 4; ++j) {
-            int len = strlen(digits[i][j]);
-            for (int k = 0; k < len; ++k) {
-                for (int l = 0; l < 7; ++l)
-                    if (solution[l] == digits[i][j][k]) {
-                        digits[i][j][k] = 'a' + l;
-                        break;
-                    }
-            }
-
-            /*
-             * 0: 41    5: 44
-             * 1: 8     6: 55
-             * 2: 40    7: 10
-             * 3: 34    8: 58
-             * 4: 38    9: 47
-             */
-            int primes[7] = {2, 3, 5, 7, 11, 13, 17};
-            int table[10] = {41, 8, 40, 34, 38, 44, 55, 10, 58, 47};
-            int value = 0;
-
-            for (int k = 0; k < len; ++k) {
-                value += primes[digits[i][j][k] - 'a'];
-            }
-            for (int k = 0; k < 10; ++k) {
-                if (table[k] == value) {
-                    number += k * mul;
-                    break;
-                }
-            }
-            mul /= 10;
-        }
-
-        total += number;
     }
 
-    printf("%d\n", total);
+    printf("Searched %d Mappings\n", searchedMappings);
+    printf("%d\n", returnValue);
 
-    fclose(f);
-    return 0;
+    return returnValue;
 }
