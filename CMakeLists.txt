@@ -32,3 +32,6 @@ add_executable(Day09.2 09.2.c)
 
 add_executable(Day10.1 10.1.c)
 add_executable(Day10.2 10.2.c)
+
+add_executable(Day11.1 11.1.c)
+add_executable(Day11.2 11.2.c)
