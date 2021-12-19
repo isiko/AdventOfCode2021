@@ -17,7 +17,7 @@ unsigned long long lastFisch[9] = { 0 };
 
 int main() {
     FILE *input_file;
-    input_file = fopen("../../inputs/06/testInput.txt", "r");
+    input_file = fopen("../inputs/06/testInput.txt", "r");
     //input_file = fopen("...txt", "r");
 
     if (!input_file){

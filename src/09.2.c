@@ -13,7 +13,7 @@ int basins[inputHeight][inputLength];
 
 int readFile(){
     FILE *input_file;
-    input_file = fopen("../../inputs/09.txt", "r");
+    input_file = fopen("../inputs/09.txt", "r");
 
     if (!input_file){
         printf("Error while loading File");

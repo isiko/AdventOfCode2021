@@ -7,7 +7,7 @@ char input[inputHeight][inputLength];
 
 int readFile(){
     FILE *input_file;
-    input_file = fopen("../../inputs/10.txt", "r");
+    input_file = fopen("../inputs/10.txt", "r");
 
     if (!input_file){
         printf("Error while loading File");

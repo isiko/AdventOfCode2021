@@ -15,7 +15,7 @@ int numbers[inputLength][inputLength2];
 
 int readFile(){
     FILE *input_file;
-    input_file = fopen(".../../inputs/03.txt", "r");
+    input_file = fopen(".../inputs/03.txt", "r");
 
     if (!input_file){
         printf("Error while loading File");

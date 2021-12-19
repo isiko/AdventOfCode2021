@@ -20,7 +20,7 @@ int lastFisch[maxCycle];
 int main() {
     FILE *input_file;
     //input_file = fopen("../testInput.txt", "r");
-    input_file = fopen("../../inputs/06.txt", "r");
+    input_file = fopen("../inputs/06.txt", "r");
 
     if (!input_file){
         printf("Error while loading File\n");

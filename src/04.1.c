@@ -67,7 +67,7 @@ void printBoardMarkings(int field){
 
 int main(){
     FILE *input_file;
-    input_file = fopen(".../../inputs/04.txt", "r");
+    input_file = fopen(".../inputs/04.txt", "r");
 
     if (!input_file){
         printf("Error while loading File");

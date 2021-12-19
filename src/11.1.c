@@ -12,7 +12,7 @@ int flashes = 0;
 
 int readFile(){
     FILE *input_file;
-    input_file = fopen("../../inputs/11.txt", "r");
+    input_file = fopen("../inputs/11.txt", "r");
 
     if (!input_file){
         printf("Error while loading File");

@@ -28,17 +28,6 @@ int digits[10][7] = {
     {1,1,1,1,0,1,1}, //9
 };
 
-void printArray(char message[], int array[]){
-    //int arrayLen = sizeof(array)/sizeof(array[0]);
-    int arrayLen =7;
-    if(strlen(message) > 0) printf("%s: ", message);
-    for (int i = 0; i < arrayLen; i++)
-    {
-        printf("%d", array[i]);
-    }
-    printf("\n");
-}
-
 int isDigit(int testFor[7]){
     for(int i = 0;i<10; i++){
         int success = 1;
@@ -69,7 +58,7 @@ int indexFromChar(char c){
 int main(){
     //Take notes
     FILE *input_file;
-    input_file = fopen("../../inputs/08.txt", "r");
+    input_file = fopen("../inputs/08.txt", "r");
 
     if (!input_file){
         printf("Error while loading File\n");
@@ -127,7 +116,6 @@ int main(){
                                     mapping[4] = s4;
                                     mapping[5] = s5;
                                     mapping[6] = s6;
-                                    //printArray("Mapping", mapping);
                                     searchedMappings++;
 
                                     int success = 1;
@@ -158,7 +146,7 @@ int main(){
         }
 
         if(mappingCorrect == 1){
-            printArray("Found Mapping", mapping);
+            printIntArray("Found Mapping", mapping, 7);
             int multiplyer = 10000;
             int outputValue = 0;
             for (int j = 0; j < 4; j++)

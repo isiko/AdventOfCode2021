@@ -18,7 +18,7 @@ char output[4];
 int main(){
     //Take notes
     FILE *input_file;
-    input_file = fopen("../../inputs/08.txt", "r");
+    input_file = fopen("../inputs/08.txt", "r");
 
     if (!input_file){
         printf("Error while loading File\n");
@@ -37,7 +37,7 @@ int main(){
         char** output = str_split(io[1], ' ');
 
         for (int j = 0; j < 4; j++){
-            printf("\"%s\" %d\n",output[j],strlen(output[j]));
+            printf("\"%s\" %d\n",output[j], strlen(output[j]));
 
             int length = strlen(output[j]);
             if (length == 2 || length == 4 || length == 3 || length == 7)

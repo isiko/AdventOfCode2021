@@ -1,7 +1,11 @@
 .idea
 *.exe
 *.obj
-cmake-build-debug
+/cmake-build-debug
+/cmake-build-debug-mingw
+/cmake-build-default
+/cmake-build-default-mingw
+/cmake-build-release-mingw
 
 .vscode
 build

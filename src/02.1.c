@@ -13,7 +13,7 @@ int main() {
     int position = 0;
 
     FILE *input;
-    input = fopen(".../../inputs/02.txt", "r");
+    input = fopen(".../inputs/02.txt", "r");
     char line[256]; /* or other suitable maximum line size */
 
     while (fgets(line, sizeof line, input) != NULL){

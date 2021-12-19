@@ -36,7 +36,7 @@ int calcFuelForPosition(int pos){
 int main(){
     //Read Crabs
     FILE *input_file;
-    input_file = fopen("../../inputs/07.txt", "r");
+    input_file = fopen("../inputs/07.txt", "r");
 
     if (!input_file){
         printf("Error while loading File\n");
